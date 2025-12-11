@@ -8,6 +8,7 @@ use crate::{
     affine_expression_trait::IntoAffineExpression, constraint::ConstraintReference, ModelWithSOS1,
 };
 use crate::{Constraint, Variable};
+pub use lpsolve::Verbosity;
 use lpsolve::{ConstraintType, Problem, SOSType, SolveStatus};
 use std::convert::TryInto;
 use std::ffi::CString;
@@ -68,6 +69,14 @@ pub fn lp_solve(to_solve: UnsolvedProblem) -> LpSolveProblem {
 
 /// An lp_solve problem instance
 pub struct LpSolveProblem(Problem);
+
+impl LpSolveProblem {
+    /// Set verbosity level for solver
+    pub fn set_verbose(mut self, level: Verbosity) -> Self {
+        self.0.set_verbose(level);
+        self
+    }
+}
 
 impl SolverModel for LpSolveProblem {
     type Solution = LpSolveSolution;
